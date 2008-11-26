@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+	xmlns:AdvancedDataGrid="AdvancedDataGrid.*"
+	xmlns:SubClasses="AdvancedDataGrid.SubClasses.*">
+	<mx:Script>
+        <![CDATA[
+        	import mx.controls.listClasses.IListItemRenderer;
+        	import mx.containers.Box;
+        	import mx.core.UIComponent;
+        	import mx.collections.XMLListCollection;
+            import mx.collections.ArrayCollection;
+            import mx.controls.listClasses.AdvancedListBaseContentHolder;
+            
+            [Bindable]
+			private var dpHierarchy:ArrayCollection = new ArrayCollection([
+			  {Region:"Southwest", Territory:"Arizona", 
+			      Territory_Rep:"Barbara Jennings", 
+			      Revenues:{Actual:38865, Estimate:40000}}, 
+			  {Region:"Southwest", Territory:"Arizona", 
+			      Territory_Rep:"Dana Binn", 
+			      Revenues:{Actual:29885, Estimate:30000}},  
+			  {Region:"Southwest", Territory:"Central California", 
+			      Territory_Rep:"Joe Smith", 
+			      Revenues:{Actual:29134, Estimate:30000}},  
+			  {Region:"Southwest", Territory:"Nevada", 
+			      Territory_Rep:"Bethany Pittman", 
+			      Revenues:{Actual:52888, Estimate:45000}},  
+			  {Region:"Southwest", Territory:"Northern California", 
+			      Territory_Rep:"Lauren Ipsum", 
+			      Revenues:{Actual:38805, Estimate:40000}}, 
+			  {Region:"Southwest", Territory:"Northern California", 
+			      Territory_Rep:"T.R. Smith", 
+			      Revenues:{Actual:55498, Estimate:40000}},  
+			  {Region:"Southwest", Territory:"Southern California", 
+			      Territory_Rep:"Alice Treu", 
+			      Revenues:{Actual:44985, Estimate:45000}}, 
+			  {Region:"Southwest", Territory:"Southern California", 
+			      Territory_Rep:"Jane Grove", 
+			      Revenues:{Actual:44913, Estimate:45000}},
+			      {Region:"Northwest", Territory:"Arizona", 
+			      Territory_Rep:"Barbara Jennings", 
+			      Revenues:{Actual:38865, Estimate:40000}}, 
+			  {Region:"Northwest", Territory:"Arizona", 
+			      Territory_Rep:"Dana Binn", 
+			      Revenues:{Actual:29885, Estimate:30000}},  
+			  {Region:"Northwest", Territory:"Central California", 
+			      Territory_Rep:"Joe Smith", 
+			      Revenues:{Actual:29134, Estimate:30000}},  
+			  {Region:"Northwest", Territory:"Nevada", 
+			      Territory_Rep:"Bethany Pittman", 
+			      Revenues:{Actual:52888, Estimate:45000}},  
+			  {Region:"Northwest", Territory:"Northern California", 
+			      Territory_Rep:"Lauren Ipsum", 
+			      Revenues:{Actual:38805, Estimate:40000}}, 
+			  {Region:"Northwest", Territory:"Northern California", 
+			      Territory_Rep:"T.R. Smith", 
+			      Revenues:{Actual:55498, Estimate:40000}},  
+			  {Region:"Northwest", Territory:"Southern California", 
+			      Territory_Rep:"Alice Treu", 
+			      Revenues:{Actual:44985, Estimate:45000}}, 
+			  {Region:"Northwest", Territory:"Southern California", 
+			      Territory_Rep:"Jane Grove", 
+			      Revenues:{Actual:44913, Estimate:45000}},
+			      {Region:"Southeast", Territory:"Arizona", 
+			      Territory_Rep:"Barbara Jennings", 
+			      Revenues:{Actual:38865, Estimate:40000}}, 
+			  {Region:"Southeast", Territory:"Arizona", 
+			      Territory_Rep:"Dana Binn", 
+			      Revenues:{Actual:29885, Estimate:30000}},  
+			  {Region:"Southeast", Territory:"Central California", 
+			      Territory_Rep:"Joe Smith", 
+			      Revenues:{Actual:29134, Estimate:30000}},  
+			  {Region:"Southeast", Territory:"Nevada", 
+			      Territory_Rep:"Bethany Pittman", 
+			      Revenues:{Actual:52888, Estimate:45000}},  
+			  {Region:"Southeast", Territory:"Northern California", 
+			      Territory_Rep:"Lauren Ipsum", 
+			      Revenues:{Actual:38805, Estimate:40000}}, 
+			  {Region:"Southeast", Territory:"Northern California", 
+			      Territory_Rep:"T.R. Smith", 
+			      Revenues:{Actual:55498, Estimate:40000}},  
+			  {Region:"Southeast", Territory:"Southern California", 
+			      Territory_Rep:"Alice Treu", 
+			      Revenues:{Actual:44985, Estimate:45000}}, 
+			  {Region:"Southeast", Territory:"Southern California", 
+			      Territory_Rep:"Jane Grove", 
+			      Revenues:{Actual:44913, Estimate:45000}},
+			      {Region:"Southwest", Territory:"Arizona", 
+			      Territory_Rep:"Barbara Jennings", 
+			      Revenues:{Actual:38865, Estimate:40000}}, 
+			  {Region:"Southwest", Territory:"Arizona", 
+			      Territory_Rep:"Dana Binn", 
+			      Revenues:{Actual:29885, Estimate:30000}},  
+			  {Region:"Southwest", Territory:"Central California", 
+			      Territory_Rep:"Joe Smith", 
+			      Revenues:{Actual:29134, Estimate:30000}},  
+			  {Region:"Southwest", Territory:"Nevada", 
+			      Territory_Rep:"Bethany Pittman", 
+			      Revenues:{Actual:52888, Estimate:45000}},  
+			  {Region:"Southwest", Territory:"Northern California", 
+			      Territory_Rep:"Lauren Ipsum", 
+			      Revenues:{Actual:38805, Estimate:40000}}, 
+			  {Region:"Southwest", Territory:"Northern California", 
+			      Territory_Rep:"T.R. Smith", 
+			      Revenues:{Actual:55498, Estimate:40000}},  
+			  {Region:"Southwest", Territory:"Southern California", 
+			      Territory_Rep:"Alice Treu", 
+			      Revenues:{Actual:44985, Estimate:45000}}, 
+			  {Region:"Southwest", Territory:"Southern California", 
+			      Territory_Rep:"Jane Grove", 
+			      Revenues:{Actual:44913, Estimate:45000}}
+			]);
+			
+			private function setTest():void{
+				myADG.setColumnsByXML(testColumn);
+					//<Function type="labelFunction" functionName="todotnumcomma" />
+					// <Column>
+					// 		<Mapping name="" vlaue="" />
+					// </Column>
+			}
+        ]]>
+    </mx:Script>
+    <mx:XML id="testColumn">
+    	<result>
+    		<Column>
+    			<Mapping name="dataField" value="Region" />
+    			<Mapping name="itemRenderer" value="defaultItem" />
+    		</Column>
+    		<Column>
+    			<Mapping name="dataField" value="Territory" />
+    		</Column>
+    		<ColumnGroup>
+    			<Mapping name="dataField" value="Revenues" />
+    			<Mapping name="headerText" value="test" />
+    			<Column>
+	    			<Mapping name="dataField" value="Actual" />
+	    		</Column>
+	    		<Column>
+	    			<Mapping name="dataField" value="Estimate" />
+	    		</Column>
+    		</ColumnGroup>
+    		<Column>
+    			<Mapping name="dataField" value="Territory_Rep" />
+    		</Column>
+
+    	</result>
+    </mx:XML>
+    <mx:VBox width="100%" height="100%">
+	    <mx:HDividedBox width="100%" height="100%">
+	    	<mx:Box width="100%" height="100%">
+	    		<mx:Button label="column set test" click="setTest();" />
+	    	</mx:Box>
+	    	<mx:VDividedBox width="100%" height="100%">
+	    		<AdvancedDataGrid:AdvancedDataGrid id="myADG" alternatingItemColors="[0xEEEEEE,0xFFFFFF]"
+			        width="100%" height="100%" 
+			        selectionMode="multipleCells"
+			        dataProvider="{dpHierarchy}">
+			        <AdvancedDataGrid:groupedColumns>
+			            <SubClasses:AdvancedDataGridColumn dataField="Region"/>
+			            <SubClasses:AdvancedDataGridColumn dataField="Territory"/>
+			            <SubClasses:AdvancedDataGridColumn dataField="Territory_Rep"
+			                headerText="Territory Rep"/>
+			            <mx:AdvancedDataGridColumnGroup dataField="Revenues">    
+			                <SubClasses:AdvancedDataGridColumn dataField="Actual"/>
+			                <SubClasses:AdvancedDataGridColumn dataField="Estimate"/>
+			            </mx:AdvancedDataGridColumnGroup>    
+			        </AdvancedDataGrid:groupedColumns>
+			   </AdvancedDataGrid:AdvancedDataGrid>
+			   
+			   <mx:Box width="100%" height="100%" />
+	    	</mx:VDividedBox>
+	    </mx:HDividedBox>
+    </mx:VBox>
+	<mx:Canvas width="100%" height="100%" id="cv"/>
+</mx:Application>
