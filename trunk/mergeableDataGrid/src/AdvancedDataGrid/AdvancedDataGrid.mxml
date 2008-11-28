@@ -22,6 +22,7 @@
 	<mx:Script>
 		<![CDATA[
 			import AdvancedDataGrid.Util.DynamicFunction;
+			import AdvancedDataGrid.SubClasses.RenderMultiplyItem;
 			import AdvancedDataGrid.Util.MergeCellInfo;
 			import mx.controls.advancedDataGridClasses.AdvancedDataGridColumnGroup;
 			import mx.events.DynamicEvent;
@@ -35,6 +36,7 @@
 			import mx.controls.listClasses.IListItemRenderer;
 			import mx.core.UIComponent;
 			
+			private var multiplyList:Array;
 			private var mergeCells:Array=new Array();
 			private var columnsKeep:Array;
 			private var mergedRowNum:Array=new Array();
@@ -279,7 +281,19 @@
 				validateDisplayList();
 			}
 			
-			override public function validateDisplayList():void{
+			
+			
+			private function getMultiplyInfo(itemRenderer:Object):int
+			{
+				for each(var item:RenderMultiplyItem in multiplyList)
+					if(item.itemRenderer == itemRenderer)
+						return item.multiply;
+				
+				return -1;
+			}
+			
+			override public function validateDisplayList():void
+			{
 				super.validateDisplayList();
 				
 				var settedCol:int=-1;
@@ -287,9 +301,15 @@
 				var tg:Object;
 				var checkItem:MergeCellInfo;
 				
-				for(var i:int=0; i<mergeCells.length; i++){
+				multiplyList = [];
+				
+				for(var i:int=0; i<mergeCells.length; i++)
+				{
 					checkItem=MergeCellInfo(mergeCells[i]);
 					tg=getItemAt(checkItem.row, checkItem.col);
+					
+					var multiplyItem:RenderMultiplyItem = new RenderMultiplyItem();
+					multiplyItem.itemRenderer = tg;
 					
 					if(tg!=null && (settedCol!=checkItem.mergeOwnerCol || settedRow!=checkItem.mergeOwnerRow)){
 						settedCol=checkItem.mergeOwnerCol;
@@ -302,12 +322,18 @@
 							multiplyNum=this.rowCount-showingRowNum;
 						}
 						tg.height=this.rowHeight*multiplyNum-2;
+						multiplyItem.multiply = multiplyNum;
 						
 						var pr:Object=Object(tg.parent);
 						pr.swapChildrenAt(pr.numChildren-1, pr.getChildIndex(DisplayObject(tg)));
-					} else if(tg!=null && settedCol==checkItem.mergeOwnerCol && settedRow==checkItem.mergeOwnerRow){
+					} 
+					else if(tg!=null && settedCol==checkItem.mergeOwnerCol && settedRow==checkItem.mergeOwnerRow)
+					{
 						tg.visible=false;
+						multiplyItem.multiply = 0;
 					}
+					
+					multiplyList[i] = multiplyItem;
 				}
 				
 				// 배경 그리기
@@ -321,6 +347,8 @@
 				var colorset:Array=this.getStyle("alternatingItemColors");
 				var row:int=0;
 				var settednum:int;
+				var multiply:int;
+				var height:Number;
 				
 				for (var col:int=0; listItems[row]!=null && col<listItems[row].length; col++){
 					settednum=1;
@@ -342,7 +370,11 @@
 							} else {
 								toSetColor=mergedRowNum[realColNum][realRowNum];
 							}
-							drawMergeCellBackground(rowBG,tg.x,tg.y,tg.width,tg.height,colorset[toSetColor%colorset.length]);
+							
+							multiply = getMultiplyInfo(tg);
+							height = (multiply == -1) ? rowInfo[0].height : rowInfo[row].height * multiply;
+							
+							drawMergeCellBackground(rowBG , tg.x , rowInfo[row].y , tg.width , height , colorset[toSetColor%colorset.length]);
 							settednum++;
 						}
 					}
