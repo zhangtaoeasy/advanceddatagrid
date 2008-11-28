@@ -552,19 +552,20 @@
 
 		    override protected function drawHighlightIndicator(indicator:Sprite, x:Number, y:Number, width:Number, height:Number, color:uint, itemRenderer:IListItemRenderer):void
 		    {
-				var item:Object=findItemRowCol(itemRenderer);
+				/* var item:Object=findItemRowCol(itemRenderer);
 				var row:int=item.row;
 				var col:int=item.col;
 				var mergeInfo:MergeCellInfo=getMergeCell(row,col);
 				
-/*				if(mergeInfo==null){
-					super.drawHighlightIndicator(indicator, x, y, width, height, color, itemRenderer);
-					return;
-				}
-*/				
 				if (isRowSelectionMode()) { 
 					drawMergeRowIndicator(indicator, row, col, itemRenderer, color); // row 단위 선택할 때
-				}
+				} */
+				
+				var multiply:int = getMultiplyInfo(itemRenderer);
+				
+				height = (multiply == -1) ? height : height * multiply;
+				
+				super.drawHighlightIndicator(indicator , x , y , width , height , color , itemRenderer);
 		    }
 		    
 		    private function drawMergeRowIndicator(indicator:Sprite, row:int, col:int, itemRenderer:IListItemRenderer, color:uint):void{ // row 단위 선택할 때
