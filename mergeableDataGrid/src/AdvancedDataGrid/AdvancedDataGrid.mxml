@@ -561,9 +561,28 @@
 					drawMergeRowIndicator(indicator, row, col, itemRenderer, color); // row 단위 선택할 때
 				} */
 				
+				
+				
+				/*INFO: 
+					drawHighlightIndicator 를 좀 더 여러개의 상황을 처리해야할 필요가 있음
+					일단  SINGLE_CELL , MULTIPLE_CELLS 만 작업
+				*/ 
 				var multiply:int = getMultiplyInfo(itemRenderer);
 				
-				height = (multiply == -1) ? height : height * multiply;
+				switch(selectionMode)
+				{
+					case NONE:
+						break;
+					case SINGLE_ROW:
+						break;
+					case MULTIPLE_ROWS:
+						break;
+					case SINGLE_CELL:
+					case MULTIPLE_CELLS:
+						height = (multiply == -1) ? height : height * multiply;
+						break;
+					default:
+				}
 				
 				super.drawHighlightIndicator(indicator , x , y , width , height , color , itemRenderer);
 		    }
@@ -599,6 +618,7 @@
 		    
             override protected function drawSelectionIndicator(indicator:Sprite, x:Number, y:Number, width:Number, height:Number, color:uint, itemRenderer:IListItemRenderer):void
 		    {
+		    	
 		    	super.drawSelectionIndicator(indicator, x, y, width, height, color, itemRenderer);
 		    	
 		    	var item:Object=findItemRowCol(itemRenderer);
@@ -611,6 +631,7 @@
 					//keepDrawedFocuses=new Array();
 					//keepDrawedFocuses.push({indicator:indicator, itemRenderer:itemRenderer});
 				}
+				
 		        //super.drawSelectionIndicator(indicator, x, y, width, height, color, itemRenderer);
 		    }
 		    
