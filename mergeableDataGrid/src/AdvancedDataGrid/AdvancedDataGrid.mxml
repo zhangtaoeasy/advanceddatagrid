@@ -549,70 +549,74 @@
 		        g.drawRect(x, y, width, height);
 		        g.endFill();
 			}
-
+			
+			/**
+			 * 
+			 * 마우스 오버했을때 배경색상을 드로우
+			 * selectionMode 의 값에 따라 각각 호출되는 함수가 다르다.
+			 * 
+			 **/
 		    override protected function drawHighlightIndicator(indicator:Sprite, x:Number, y:Number, width:Number, height:Number, color:uint, itemRenderer:IListItemRenderer):void
-		    {
-				/* var item:Object=findItemRowCol(itemRenderer);
-				var row:int=item.row;
-				var col:int=item.col;
-				var mergeInfo:MergeCellInfo=getMergeCell(row,col);
-				
-				if (isRowSelectionMode()) { 
-					drawMergeRowIndicator(indicator, row, col, itemRenderer, color); // row 단위 선택할 때
-				} */
-				
-				
-				
-				/*INFO: 
-					drawHighlightIndicator 를 좀 더 여러개의 상황을 처리해야할 필요가 있음
-					일단  SINGLE_CELL , MULTIPLE_CELLS 만 작업
-				*/ 
-				var multiply:int = getMultiplyInfo(itemRenderer);
-				
-				switch(selectionMode)
+		    { 
+				if( isRowSelectionMode() )
 				{
-					case NONE:
-						break;
-					case SINGLE_ROW:
-						break;
-					case MULTIPLE_ROWS:
-						break;
-					case SINGLE_CELL:
-					case MULTIPLE_CELLS:
-						height = (multiply == -1) ? height : height * multiply;
-						break;
-					default:
+					var item:Object = findItemRowCol(itemRenderer);
+					drawMergeRowIndicator(indicator, item.row, item.col, itemRenderer, color);
+					return;
 				}
 				
+				var multiply:int = getMultiplyInfo(itemRenderer);
+				
+				height = (multiply == -1) ? height : height * multiply;
 				super.drawHighlightIndicator(indicator , x , y , width , height , color , itemRenderer);
 		    }
 		    
-		    private function drawMergeRowIndicator(indicator:Sprite, row:int, col:int, itemRenderer:IListItemRenderer, color:uint):void{ // row 단위 선택할 때
-		    	var i:int;
-		    	var g:Graphics = Sprite(indicator).graphics;
+		    /**
+			 * 
+			 * selectionMode 값이 SINGLE_ROW , MULTIPLE_ROWS 선택값으로 되어 있을때 호출되는 함수
+			 * 
+			 **/
+		    private function drawMergeRowIndicator(indicator:Sprite, row:int, col:int, itemRenderer:IListItemRenderer, color:uint):void
+		    {
+		    	var length:int = _columns.length;
 				var item:IListItemRenderer;
-				row+=this.verticalScrollPosition;
-				col+=this.horizontalScrollPosition;
+				var multiply:int;
+				
+				var width:Number;
+				var height:Number;
+
+				var actualRow:int = row + this.verticalScrollPosition;
+
+				var g:Graphics = indicator.graphics;
 				
 				g.clear();
 				
-				for(i=0; i<_columns.length; i++){
-					var mergeInfo:MergeCellInfo=getMergeCell(row,i);
+				for(var i:int = 0 ; i < length ; i++)
+				{
+					var mergeInfo:MergeCellInfo = getMergeCell(actualRow , i);
+						
+					if(mergeInfo != null && mergeInfo.row != mergeInfo.mergeOwnerRow)
+						item = getItemAt( Math.max(mergeInfo.mergeOwnerRow , this.verticalScrollPosition) , i);
+					else 
+						item = getItemAt(actualRow , i);
+
+					var pt:Point = Sprite(indicator).globalToLocal(item.parent.localToGlobal(new Point(item.x,item.y)));
 					
+					multiply = getMultiplyInfo(item);
 					
-					if(mergeInfo!=null && mergeInfo.row!=mergeInfo.mergeOwnerRow){
-						item=getItemAt(Math.max(mergeInfo.mergeOwnerRow, this.verticalScrollPosition), i);
-					} else {
-						item=getItemAt(row,i);
-					}
+					width = Math.min(item.width, listContent.width - pt.x);
+					height = (multiply == -1) ? rowInfo[0].height : rowInfo[row].height * multiply;
 					
-					var pt:Point=Sprite(indicator).globalToLocal(item.parent.localToGlobal(new Point(item.x,item.y)));
-					
-					var w:Number=Math.min(item.width, listContent.width - pt.x);
-					var h:Number=Math.min(item.height, listContent.height - pt.y);
 		            g.beginFill(color);
-			        g.drawRect(pt.x, pt.y, w, h);
+		            
+		            
+		            /*
+		            	FIXME: X,Y 좌표계산이 정확하지 않음 마우스 휠 움직임에 따라 부정확한 선택 화면을 보여줌
+		            */
+		            
+			        g.drawRect(pt.x , pt.y - 2 , width , height);
 			        g.endFill();
+			        
 				}
 		    }
 		    
