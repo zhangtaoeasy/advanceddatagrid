@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+<mx:Application 
+	xmlns:mx="http://www.adobe.com/2006/mxml"
 	xmlns:AdvancedDataGrid="AdvancedDataGrid.*"
-	xmlns:SubClasses="AdvancedDataGrid.SubClasses.*">
+	xmlns:SubClasses="AdvancedDataGrid.SubClasses.*"
+	layout="horizontal" xmlns:controls="com.controls.*" 
+	xmlns:advancedDataGridClasses="com.controls.advancedDataGridClasses.*">
 	<mx:Script>
         <![CDATA[
         	import mx.controls.listClasses.IListItemRenderer;
@@ -111,7 +114,8 @@
 			      Revenues:{Actual:44913, Estimate:45000}}
 			]);
 			
-			private function setTest():void{
+			private function setTest():void
+			{
 				myADG.setColumnsByXML(testColumn);
 					//<Function type="labelFunction" functionName="todotnumcomma" />
 					// <Column>
@@ -145,31 +149,68 @@
 
     	</result>
     </mx:XML>
-    <mx:VBox width="100%" height="100%">
-	    <mx:HDividedBox width="100%" height="100%">
-	    	<mx:Box width="100%" height="100%">
-	    		<mx:Button label="column set test" click="setTest();" />
-	    	</mx:Box>
-	    	<mx:VDividedBox width="100%" height="100%">
-	    		<AdvancedDataGrid:AdvancedDataGrid id="myADG" alternatingItemColors="[0xEEEEEE,0xFFFFFF]"
-			        width="100%" height="100%" 
-			        selectionMode="multipleCells"
-			        dataProvider="{dpHierarchy}">
-			        <AdvancedDataGrid:groupedColumns>
-			            <SubClasses:AdvancedDataGridColumn dataField="Region"/>
-			            <SubClasses:AdvancedDataGridColumn dataField="Territory"/>
-			            <SubClasses:AdvancedDataGridColumn dataField="Territory_Rep"
-			                headerText="Territory Rep"/>
-			            <mx:AdvancedDataGridColumnGroup dataField="Revenues">    
-			                <SubClasses:AdvancedDataGridColumn dataField="Actual"/>
-			                <SubClasses:AdvancedDataGridColumn dataField="Estimate"/>
-			            </mx:AdvancedDataGridColumnGroup>    
-			        </AdvancedDataGrid:groupedColumns>
-			   </AdvancedDataGrid:AdvancedDataGrid>
-			   
-			   <mx:Box width="100%" height="100%" />
-	    	</mx:VDividedBox>
-	    </mx:HDividedBox>
-    </mx:VBox>
-	<mx:Canvas width="100%" height="100%" id="cv"/>
+    
+	
+	<mx:Button label="column set test" click="setTest();" />
+	
+	<mx:HDividedBox width="100%" height="100%">
+		<mx:Canvas width="100%" height="100%"/>
+		
+		<mx:VDividedBox width="100%" height="100%">
+			<!--<mx:Canvas width="100%" height="100%" backgroundColor="green">-->
+					
+					<!-- version1
+						
+						셀렉션이 영역을 트리로 보여줄수 있고 XML 형태의 데이터 그룹핑을 재구성할수 있는 버전
+						마우스 스크롤링이나 헤더 드래깅에 약간의 문제를 가지고 있음
+						
+					-->
+					
+					<AdvancedDataGrid:AdvancedDataGrid id="myADG" 
+				        	width="100%" height="100%" 
+							alternatingItemColors="[0xEEEEEE,0xFFFFFF]"
+					        selectionMode="singleRow"
+					        dataProvider="{dpHierarchy}">
+						<AdvancedDataGrid:groupedColumns>
+							<SubClasses:AdvancedDataGridColumn dataField="Region"/>
+							<SubClasses:AdvancedDataGridColumn dataField="Territory"/>
+							<SubClasses:AdvancedDataGridColumn dataField="Territory_Rep" headerText="Territory Rep"/>
+							<mx:AdvancedDataGridColumnGroup dataField="Revenues">    
+								<SubClasses:AdvancedDataGridColumn dataField="Actual"/>
+								<SubClasses:AdvancedDataGridColumn dataField="Estimate"/>
+							</mx:AdvancedDataGridColumnGroup>    
+						</AdvancedDataGrid:groupedColumns>
+					</AdvancedDataGrid:AdvancedDataGrid>
+				   
+					<!-- version2
+				   
+						셀렉션이 ver1 처럼 트리로 선택되지는 않지만 헤더 드래깅이나 마우스 스크롤링
+						에서 데이터가 부정확하게 표시되는 현상이 수정된 안정화된 버전
+						
+						setColumnsByXML() 는 아직 제공되지 않음
+				   				   
+					-->
+				   
+					<controls:AdvancedDataGridEx
+				   			width="100%" height="100%"
+				   			alternatingItemColors="[0xEEEEEE,0xFFFFFF]"
+							selectionMode="singleRow"
+							dataProvider="{dpHierarchy}">
+							
+						<controls:groupedColumns>							
+							<advancedDataGridClasses:AdvancedDataGridColumn dataField="Region" verticalMerge="true"/>
+							<advancedDataGridClasses:AdvancedDataGridColumn dataField="Territory" verticalMerge="true"/>
+							
+							<mx:AdvancedDataGridColumnGroup dataField="Revenues">    
+				                <advancedDataGridClasses:AdvancedDataGridColumn dataField="Actual"/>
+				                <advancedDataGridClasses:AdvancedDataGridColumn dataField="Estimate"/>
+				            </mx:AdvancedDataGridColumnGroup> 
+						</controls:groupedColumns>
+
+					</controls:AdvancedDataGridEx>
+							
+		</mx:VDividedBox>
+		
+	</mx:HDividedBox>
+
 </mx:Application>
