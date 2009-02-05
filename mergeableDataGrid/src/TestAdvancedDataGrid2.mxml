@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application
+  xmlns:mx="http://www.adobe.com/2006/mxml"
+  layout="horizontal"
+  xmlns:hivesoft="http://www.hivesoft.co.kr"
+  xmlns:comp="com.controls.*" xmlns:SubClasses="AdvancedDataGrid.SubClasses.*" xmlns:advancedDataGridClasses="com.controls.advancedDataGridClasses.*">
+  <mx:Style>
+
+.cssMainAdvanceDataGrid{
+  font-family: MS Gothic, Arial;               /* フォント種類               */
+  font-size: 10.5;                             /* フォントサイズ             */
+  font-weight: normal;                         /* フォント太さ               */
+  color: #000000;                              /* 文字色：黒                 */
+  border-color : #000000;                      /* 表のライン色：黒           */
+  border-style : solid;                        /* 表の影設定：true           */
+  drop-shadow-enabled : true;                  /* Drop Shadow Enabled        */
+  shadow-direction : right;                    /* 表の影位置：右             */
+  header-colors: #ffffff, #ffffff;             /* Header Colors              */
+  horizontal-grid-lines: false;                 /* Horizontal Grid Lines      */
+  horizontal-grid-line-color: #000000;         /* Horizontal Grid Line Color */
+  vertical-grid-line-color: #000000;           /* Vertical Grid Line Color   */
+  border-color: #000000;                      /* Border Color               */
+  headerStyleName : "cssMainAdvanceDataGridHeader"; /* Header Style          */
+}
+
+
+.cssMainAdvanceDataGridHeader{
+  font-family: MS Gothic, Arial;               /* フォント種類               */
+  font-size: 10.5;                             /* フォントサイズ             */
+  font-weight: bold;                         /* フォント太さ               */
+  text-align : center;                         /* 文字整列：中央　           */
+}
+
+  </mx:Style>
+  <mx:Script>
+        <![CDATA[
+          import mx.utils.ObjectUtil;
+          import mx.controls.Alert;
+          import mx.events.ListEvent;
+          import mx.controls.listClasses.IListItemRenderer;
+          import mx.containers.Box;
+          import mx.core.UIComponent;
+          import mx.collections.XMLListCollection;
+          import mx.collections.ArrayCollection;
+          import mx.controls.listClasses.AdvancedListBaseContentHolder;
+
+          [Bindable]
+          private var dpHierarchy2:ArrayCollection = new ArrayCollection([
+          {Region:"Southwest", Territory:"Arizona",
+           Territory_Rep:"Barbara Jennings",
+           Revenues:{Actual:38865, Estimate:40000}},
+          {Region:"Southwest", Territory:"Arizona",
+           Territory_Rep:"Dana Binn",
+           Revenues:{Actual:29885, Estimate:30000}},
+          {Region:"Southwest", Territory:"Central California",
+           Territory_Rep:"Joe Smith",
+           Revenues:{Actual:29134, Estimate:30000}},
+          {Region:"Southwest", Territory:"Nevada",
+           Territory_Rep:"Bethany Pittman",
+           Revenues:{Actual:52888, Estimate:45000}},
+          {Region:"Southwest", Territory:"Northern California",
+           Territory_Rep:"Lauren Ipsum",
+           Revenues:{Actual:38805, Estimate:40000}},
+          {Region:"Southwest", Territory:"Northern California",
+           Territory_Rep:"T.R. Smith",
+           Revenues:{Actual:55498, Estimate:40000}},
+          {Region:"Southwest", Territory:"Southern California",
+           Territory_Rep:"Alice Treu",
+           Revenues:{Actual:44985, Estimate:45000}},
+          {Region:"Southwest", Territory:"Southern California",
+           Territory_Rep:"Jane Grove",
+           Revenues:{Actual:44913, Estimate:45000}},
+          {Region:"Northwest", Territory:"Arizona",
+           Territory_Rep:"Barbara Jennings",
+           Revenues:{Actual:38865, Estimate:40000}},
+          {Region:"Northwest", Territory:"Arizona",
+           Territory_Rep:"Dana Binn",
+           Revenues:{Actual:29885, Estimate:30000}},
+          {Region:"Northwest", Territory:"Central California",
+           Territory_Rep:"Joe Smith",
+           Revenues:{Actual:29134, Estimate:30000}},
+          {Region:"Northwest", Territory:"Nevada",
+           Territory_Rep:"Bethany Pittman",
+           Revenues:{Actual:52888, Estimate:45000}},
+          {Region:"Northwest", Territory:"Northern California",
+           Territory_Rep:"Lauren Ipsum",
+           Revenues:{Actual:38805, Estimate:40000}},
+          {Region:"Northwest", Territory:"Northern California",
+           Territory_Rep:"T.R. Smith",
+           Revenues:{Actual:55498, Estimate:40000}},
+          {Region:"Northwest", Territory:"Southern California",
+           Territory_Rep:"Alice Treu",
+           Revenues:{Actual:44985, Estimate:45000}},
+          {Region:"Northwest", Territory:"Southern California",
+           Territory_Rep:"Jane Grove",
+           Revenues:{Actual:44913, Estimate:45000}},
+          {Region:"Southeast", Territory:"Arizona",
+           Territory_Rep:"Barbara Jennings",
+           Revenues:{Actual:38865, Estimate:40000}},
+          {Region:"Southeast", Territory:"Arizona",
+           Territory_Rep:"Dana Binn",
+           Revenues:{Actual:29885, Estimate:30000}},
+          {Region:"Southeast", Territory:"Central California",
+           Territory_Rep:"Joe Smith",
+           Revenues:{Actual:29134, Estimate:30000}},
+          {Region:"Southeast", Territory:"Nevada",
+           Territory_Rep:"Bethany Pittman",
+           Revenues:{Actual:52888, Estimate:45000}},
+          {Region:"Southeast", Territory:"Northern California",
+           Territory_Rep:"Lauren Ipsum",
+           Revenues:{Actual:38805, Estimate:40000}},
+          {Region:"Southeast", Territory:"Northern California",
+           Territory_Rep:"T.R. Smith",
+           Revenues:{Actual:55498, Estimate:40000}},
+          {Region:"Southeast", Territory:"Southern California",
+           Territory_Rep:"Alice Treu",
+           Revenues:{Actual:44985, Estimate:45000}},
+          {Region:"Southeast", Territory:"Southern California",
+           Territory_Rep:"Jane Grove",
+           Revenues:{Actual:44913, Estimate:45000}}
+        ]);
+
+
+        private function itemClickhandler(event:ListEvent):void{
+          Alert.show(ObjectUtil.toString(event.currentTarget.selectedItem));
+        }
+
+
+        private function numericSort(obj1:Object,obj2:Object):int{
+          var result:int = 0;
+          var num1:Number = Number(obj1.Revenues.Actual);
+          var num2:Number = Number(obj2.Revenues.Actual);
+          if(num1>num2)
+            result = 1;
+          else if(num1==num2)
+            result = 0;
+          else if(num1<num2)
+            result = -1;
+
+          return result;
+        }
+
+
+        ]]>
+    </mx:Script>
+
+    <mx:Box width="100%" height="100%">
+      <comp:MyAdvancedDataGrid styleName="cssMainAdvanceDataGrid" width="100%" height="100%" horizontalScrollPolicy="auto" id="dg1"
+            horizontalGridLines="true" dataProvider="{dpHierarchy2}" sortExpertMode="true">
+        <comp:groupedColumns>
+         <advancedDataGridClasses:MergeAdvancedDataGridColumn itemRenderer="com.controls.advancedDataGridClasses.AdvancedDataGridItemRendererEx" dataField="Region" verticalMerge="true"/>
+         <advancedDataGridClasses:MergeAdvancedDataGridColumn itemRenderer="com.controls.advancedDataGridClasses.AdvancedDataGridItemRendererEx" dataField="Territory" verticalMerge="true" />
+         <advancedDataGridClasses:MergeAdvancedDataGridColumn dataField="Territory_Rep" />
+         <advancedDataGridClasses:AdvancedDataGridColumnGroup dataField="Revenues" >
+           <advancedDataGridClasses:MergeAdvancedDataGridColumn sortable="true" sortCompareFunction="numericSort"  dataField="Actual"/>
+           <advancedDataGridClasses:MergeAdvancedDataGridColumn sortable="true" sortCompareFunction="numericSort" dataField="Estimate"/>
+         </advancedDataGridClasses:AdvancedDataGridColumnGroup>
+        </comp:groupedColumns>
+      </comp:MyAdvancedDataGrid>
+    </mx:Box>
+</mx:Application>
